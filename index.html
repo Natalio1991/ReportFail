@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="main.js" type="module"></script>
+
+    <title>Hora x Hora fallas funcionales</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+    }
+
+    #root {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #f4f6f8;
+      overflow-y: auto;
+    }
+
+    /* Encabezado */
+    .header-container {
+      width: 100%;
+      color: #FFFFFF;
+      background-color: #2E2D2D;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header-container h2 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    /* GRID/FLEX RESPONSIVO PARA LAS TARJETAS */
+    .cards-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Estilo de Tarjeta */
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 220px; /* Crecimiento, encogimiento y ancho base */
+      max-width: 250px;
+      min-width: 200px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-title {
+      margin-top: 15px;
+      margin-bottom: 0;
+      font-size: 30px;
+      font-weight: bold;
+      color: #383636;
+      text-align: center;
+    }
+
+    /* Contenedor del Progreso Circular */
+    .progress-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg); /* Empieza el círculo desde arriba */
+    }
+
+    circle {
+      fill: none;
+      stroke-width: 20;
+      stroke-linecap: round;
+    }
+
+    /* Círculo de fondo */
+    .bg-circle {
+      stroke: #e6e8ec;
+    }
+
+    /* Texto central */
+    .percentage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 34px;
+      font-weight: bold;
+      color: #383636;
+    }
+
+    /* CONTENEDOR Y ESTILOS DE LA TABLA */
+    #table {
+      width: 100%;
+      max-width: 1220px;
+      margin: 10px auto 50px auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #tabla-container {
+      width: 100%;
+      overflow-x: auto; /* Permite scroll horizontal en pantallas muy pequeñas */
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto; /* Mantiene anchos fijos de columna */
+      border: 1px solid #e0e0e0;
+    }
+
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #2E2D2D;
+      color: white;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    /* RECORTE DE TEXTO (TRUNCATE) PARA EVITAR QUE DESORDENE LA TABLA */
+    .cell-truncate {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* Asignación de anchos a columnas específicas si es necesario */
+    table th:nth-child(1) { width: 15%; }
+    table th:nth-child(2) { width: 15%; }
+    table th:nth-child(3) { width: 15%; }
+    table th:nth-child(4) { width: 15%; } /* Columna de Falla/Descripción con más espacio */
+    table th:nth-child(5) { width: 40%; }
+
+  </style>
+
+</head>
+
+<body>      
+
+    <div id="root">
+
+  <div class="header-container">
+    <h2 id="header", style="text-align:center;">Hora x Hora fallas funcionales</h2>
+  </div>
+
+  <!-- TARJETAS RESPONSIVAS -->
+  <div class="cards-grid" id="progress">
+    
+    <div class="card">
+      <div class="progress-container">
+        <svg viewBox="0 0 160 160">
+          <circle class="bg-circle" cx="80" cy="80" r="70"></circle>
+          <circle class="progress-circle" id="bar_pr1" cx="80" cy="80" r="70"
+            style="stroke: #F20A0A; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1s ease-in-out;"></circle>
+        </svg>
+        <div class="percentage" id="text_pr1">0/15</div>
+      </div>
+      <p class="card-title">Fallas PR1</p>
+    </div>
+
+    <div class="card">
+      <div class="progress-container">
+        <svg viewBox="0 0 160 160">
+          <circle class="bg-circle" cx="80" cy="80" r="70"></circle>
+          <circle class="progress-circle" id="bar_f1" cx="80" cy="80" r="70"
+            style="stroke: #00B50B; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1s ease-in-out;"></circle>
+        </svg>
+        <div class="percentage" id="text_f1">0/15</div>
+      </div>
+      <p class="card-title">Fallas F1</p>
+    </div>
+
+    <div class="card">
+      <div class="progress-container">
+        <svg viewBox="0 0 160 160">
+          <circle class="bg-circle" cx="80" cy="80" r="70"></circle>
+          <circle class="progress-circle" id="bar_sf1" cx="80" cy="80" r="70"
+            style="stroke: #0047DB; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1s ease-in-out;"></circle>
+        </svg>
+        <div class="percentage" id="text_sf1">0/15</div>
+      </div>
+      <p class="card-title">Fallas SF1</p>
+    </div>
+
+    <div class="card">
+      <div class="progress-container">
+        <svg viewBox="0 0 160 160">
+          <circle class="bg-circle" cx="80" cy="80" r="70"></circle>
+          <circle class="progress-circle" id="bar_sf2" cx="80" cy="80" r="70"
+            style="stroke: #F06B05; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1s ease-in-out;"></circle>
+        </svg>
+        <div class="percentage" id="text_sf2">0/15</div>
+      </div>
+      <p class="card-title">Fallas SF2</p>
+    </div>
+
+  </div>
+
+  <!-- TABLA CONTENEDORA -->
+  <div id="table">
+    <div id="tabla-container", style="text-align:center;">Cargando datos...</div>
+  </div>
+
+</div>
+    
+</body>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script type="module">
+
+   
+
+</script>
+
+</html>
